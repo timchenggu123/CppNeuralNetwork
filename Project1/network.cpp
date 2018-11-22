@@ -1,18 +1,15 @@
 #include "Header.h"
 
 class network {
-	int *ptr_layer;
-	int layer_size;
+	std::vector<int> nwlayers;
 
 public:
-	network(int *layer, int size) {
-		ptr_layer = layer;
-		layer_size = size;
+	network(std::vector<int> layers) {
+		nwlayers = layers;
 	}
 	
 	void printLayer() {
 	
-		std::cout << ptr_layer[1];
-
+		std::cout << nwlayers.size();
 	}
 };

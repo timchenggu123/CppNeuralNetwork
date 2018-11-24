@@ -1,5 +1,6 @@
 #include "Header.h"
 
+
 class network {
 	std::vector<int> nwlayers;
 	int nlayers,biases,weights;
@@ -14,8 +15,8 @@ public:
 	
 	}
 
-	double sigmoid(std::vector<double> z) {
-		return 1/(1+exp
+	double sigmoid(std::vector<double> &z) {
+	
 	}
 	
 	void printLayers() {

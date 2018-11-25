@@ -6,5 +6,6 @@ namespace NNHelper{
 	extern std::vector<double> my_exp(std::vector<double> &vec);
 }
 
+
 #endif // !NNHELPERFUNCTIONS_H
 #pragma once

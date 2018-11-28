@@ -3,15 +3,17 @@
 
 class network {
 	std::vector<int> nwlayers;
-	int nlayers,biases,weights;
+	std::vector<int> biases;
+	std::vector<int> weights;
+	int nlayers; //number of layers in the network
 
-public:
 	network(std::vector<int> &layers) {
 		nwlayers = layers;
 		nlayers = layers.size();
 	}
 
-	void SGD (){
+	void SGD (int x, int y){
+
 		
 	}
 

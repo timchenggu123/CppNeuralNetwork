@@ -4,6 +4,7 @@
 
 namespace NNHelper{
 	extern std::vector<double> my_exp(std::vector<double> &vec);
+	extern std::array<int, 2> shape(std::vector<double> &vec);
 }
 
 

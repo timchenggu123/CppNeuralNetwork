@@ -15,10 +15,21 @@ public:
 		
 	}
 
+	void backprop() {
+
+	}
+
+	void update (){
+
+	}
+
+	void feedforward() {
+
+	}
 
 
 	std::vector<double> sigmoid(std::vector<double> &z) {
-		//This function should be quite self-explainatory
+		//This function applies sigmoid neuron calcuations given a vector of z values.
 		std::vector<double> output(z.size(), 0); // This vector will hold the function output values
 
 		for (int i = 0; i < z.size();i++) {
@@ -29,6 +40,7 @@ public:
 	}
 
 	std::vector<double> dsigmoid(std::vector<double> &z) {
+		//This is the derivative of the sigmoid function 
 		std::vector<double> output(z.size(), 0);
 
 		for (int i = 0; i < z.size(); i++) {
@@ -42,3 +54,4 @@ public:
 		std::cout << nwlayers.size();
 	}
 };
+

@@ -2,17 +2,27 @@
 #include "NNHelperFunctions.h"
 #include "network.h"
 
-network::network(std::vector<int> &layers) {
+network::network(std::vector<int> &layers, std::vector<std::vector<int>> &data, std::vector<int> &values ) {
+	x = data;
+	y = values;
 	nwlayers = layers;
 	nlayers = layers.size();
 }
 
-void network::train (int x, int y){
+void network::train ( int &epochs, int batch_size, double eta ){
+	// some description of the function goes here
 
-		
+	if (x.size() != y.size())
+		throw "Error in network.train(): input vector x and y must be the same length";
+
+	std::vector<int> index(x.size(), 0); //This holds the indices for our input vector x and output vector y
+	
+
+
 }
 
-void network::backprop() {
+void network::backprop(std::vector<std::vector<int>> &x, std::vector<int> &y) {
+	//
 
 }
 

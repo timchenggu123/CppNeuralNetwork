@@ -3,9 +3,9 @@
 
 class network {
 public:
-	network(std::vector<int> &layers);
-	void train(int x, int y);
-	void backprop();
+	network(std::vector<int>& layers, std::vector<std::vector<int>>& data, std::vector<int>& values);
+	void backprop(std::vector<std::vector<int>>& x, std::vector<int>& y);
+	void train(int & epochs, int batch_size, double eta);
 	void update();
 	void prediction();
 	std::vector<double> sigmoid(std::vector<double> &z);

@@ -5,5 +5,7 @@
 #include <cmath>
 #include <vector>
 #include <array>
+#include <random>
+#include <ctime>
 #endif
 

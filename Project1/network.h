@@ -4,7 +4,7 @@
 class network {
 public:
 	network(std::vector<int> &layers);
-	void SGD(int x, int y);
+	void train(int x, int y);
 	void backprop();
 	void update();
 	void prediction();
@@ -15,6 +15,8 @@ private:
 	std::vector<int> nwlayers;
 	std::vector<int> biases;
 	std::vector<int> weights;
+	std::vector<std::vector<int>> x; // A vector storing all the initial x inputs
+	std::vector<int> y; //A vector storing all the corresponding y's for each x
 	int nlayers;
 
 };

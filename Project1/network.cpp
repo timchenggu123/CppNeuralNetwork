@@ -7,7 +7,7 @@ network::network(std::vector<int> &layers) {
 	nlayers = layers.size();
 }
 
-void network::SGD (int x, int y){
+void network::train (int x, int y){
 
 		
 }

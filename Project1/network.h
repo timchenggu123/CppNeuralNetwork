@@ -7,7 +7,7 @@ public:
 	void SGD(int x, int y);
 	void backprop();
 	void update();
-	void feedforward();
+	void prediction();
 	std::vector<double> sigmoid(std::vector<double> &z);
 	std::vector<double> dsigmoid(std::vector<double> &z);
 	void printLayers();

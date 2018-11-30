@@ -7,5 +7,7 @@
 #include <array>
 #include <random>
 #include <ctime>
+#include <algorithm>
+
 #endif
 

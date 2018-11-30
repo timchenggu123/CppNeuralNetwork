@@ -15,9 +15,19 @@ void network::train ( int &epochs, int batch_size, double eta ){
 	if (x.size() != y.size())
 		throw "Error in network.train(): input vector x and y must be the same length";
 
-	std::vector<int> index(x.size(), 0); //This holds the indices for our input vector x and output vector y
+	int n = x.size();
+	std::vector<int> index(n, 0); //This holds the indices for our input vector x and output vector y
 	
-
+	//randomly shuffles the vector -------------------------------------------------------------
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::shuffle(index.begin(), index.end(), rng);
+	
+	for (int i = 0 - batch_size; i < n; i += batch_size) {
+		int batch[2] = { i + batch_size, i + batch_size * 2 };
+		
+	}
+		
 
 }
 

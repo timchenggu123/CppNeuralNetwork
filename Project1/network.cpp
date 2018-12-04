@@ -2,7 +2,7 @@
 #include "NNHelperFunctions.h"
 #include "network.h"
 
-network::network(std::vector<std::vector<int>> &layers, std::vector<std::vector<double>> &data, std::vector<double> &values ) {
+network::network(std::vector<int> &layers, std::vector<std::vector<double>> &data, std::vector<double> &values ) {
 	x = data;
 	y = values;
 	nwlayers = layers;
@@ -11,15 +11,15 @@ network::network(std::vector<std::vector<int>> &layers, std::vector<std::vector<
 	//initializing biases 
 	biases.resize(layers.size() - 1); // -1 here because the first layer is an input layer
 	for (int i = 1; i < (layers.size()); i++) { // index starts at one because first layer is input layer
-		biases[i - 1].resize(layers[i].size());
+		biases[i - 1].resize(layers[i]);
 	}
 
 	// initializing weights
 	weights.resize(layers.size() - 1);
 	for (int i = 1; i < (layers.size()); i++) { // index starts at one because first layer is input layer 
-		weights[i - 1].resize(layers[i].size());
+		weights[i - 1].resize(layers[i]);
 		for (auto &element : weights[i - 1]) {
-			element.resize(layers[i - 1].size());
+			element.resize(layers[i - 1]);
 		}
 
 	}
@@ -37,7 +37,7 @@ network::network(std::vector<std::vector<int>> &layers, std::vector<std::vector<
 	}
 	//intializing weights
 	for (int i = 0; i < weights.size(); i++) {
-		for (int j = 0; i < weights[i].size(); j++) {
+		for (int j = 0; j < weights[i].size(); j++) {
 			for (int k = 0; k < weights[i][j].size(); k++) {
 				weights[i][j][k] = nd(rng);
 			}
@@ -124,6 +124,16 @@ std::vector<double> network::dsigmoid(std::vector<double> &z) {
 	
 void network::printLayers() {
 	std::cout << nwlayers.size();
+}
+
+void network::getBiases() {
+
+	for (auto i : biases) {
+		for (auto j : i) {
+			std::cout << j;
+		}
+		std::cout << std::endl;
+	}
 }
 
 

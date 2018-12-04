@@ -3,7 +3,7 @@
 
 class network {
 public:
-	network(std::vector<std::vector<int>> &layers, std::vector<std::vector<double>> &data, std::vector<double> &values);
+	network(std::vector<int> &layers, std::vector<std::vector<double>> &data, std::vector<double> &values);
 	void train(int & epochs, int batch_size, double eta);
 	void updateNetwork(int * batch, int batch_size, double eta);
 	void backprop(std::vector<double>& xx, double & yy);
@@ -11,8 +11,9 @@ public:
 	std::vector<double> sigmoid(std::vector<double> &z);
 	std::vector<double> dsigmoid(std::vector<double> &z);
 	void printLayers();
+	void getBiases();
 private:
-	std::vector<std::vector<int>> nwlayers;
+	std::vector<int> nwlayers;
 	std::vector<std::vector<double>>  biases; //storing all biases for each sigmoid neuron, layer by layer
 	std::vector<std::vector<std::vector<double> > > weights; //storing all weights for each sigmoid neuron, layer by layer
 	std::vector<std::vector<double>> x; // A vector storing all the initial x inputs

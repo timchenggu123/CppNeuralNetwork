@@ -19,7 +19,7 @@ private:
 	std::vector<std::vector<double>> x; // A vector storing all the initial x inputs
 	std::vector<double> y; //A vector storing all the corresponding y's for each x
 	std::vector<std::vector<double>> die_b; //storing the resulting gradient descent vector for b 
-	std::vector<std::vector<double>> die_n; //storing the resulting gradient desdcent vector for n
+	std::vector<std::vector<std::vector<double>>> die_w; //storing the resulting gradient desdcent vector for w
 	std::vector<std::vector<double>> activations; //storing all the neuron actionvations in the backprop() function
 	int nlayers;
 

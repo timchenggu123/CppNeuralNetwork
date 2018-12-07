@@ -11,7 +11,7 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 	//initializing biases 
 	biases.resize(layers.size() - 1); // -1 here because the first layer is an input layer
 	for (int i = 1; i < (layers.size()); i++) { // index starts at one because first layer is input layer
-		biases[i - 1].resize(layers[i]);
+		biases[i - 1].resize(layers[i]); //i - 1 here because we set i to be the layer we want to target, and i starts at 1 instead of 0
 	}
 
 	// initializing weights
@@ -24,6 +24,19 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 
 	}
 
+	//initializing die_b and die_w as zeor matrices with dimensions same as weights and biases
+	die_b.resize(biases.size());
+	for (int i = 0; i < biases.size(); i++) {
+		die_b[i].resize(biases[i].resize);
+	}
+
+	die_w.resize(weights.size());
+	for (int i = 0; i < biases.size(); i++) {
+		die_w.resize(weights[i].size);
+		for (int j = 0; j < biases.size(); j++) {
+			die_w[i][j].resize(weights[i][j].size());
+		}
+	}
 	//randomly assign values the biases and wieghts
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
@@ -60,7 +73,7 @@ void network::train ( int &epochs, int batch_size, double eta ){
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::shuffle(index.begin(), index.end(), rng);
 	
-	int *batch = new int[batch_size];
+	int *batch = new int[batch_size]; //initialize a batch vector of use-specified length containing elements from the index vector
 	for (int i = 0 - batch_size; i < n; i += batch_size) {
 		
 
@@ -72,7 +85,7 @@ void network::train ( int &epochs, int batch_size, double eta ){
 			/*for testing purposes*/ std::cout << batch[1] << std::endl;
 		}
 		this->updateNetwork(batch, batch_size,eta);
-
+		
 		
 	}
 	delete[] batch;

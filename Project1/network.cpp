@@ -64,7 +64,7 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 }
 
 
-void network::train ( int &epochs, int batch_size, double eta ){
+void network::train ( int epochs, int batch_size, double eta ){
 	// some description of the function goes here
 
 	if (x.size() != y.size()) {

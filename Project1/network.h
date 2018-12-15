@@ -4,7 +4,7 @@
 class network {
 public:
 	network(std::vector<int> &layers, std::vector<std::vector<double>> &data, std::vector<double> &values);
-	void train(int & epochs, int batch_size, double eta);
+	void train(int  epochs, int batch_size, double eta);
 	void updateNetwork(int * batch, int batch_size, double eta);
 	void backprop(std::vector<double>& xx, double & yy);
 	void prediction();

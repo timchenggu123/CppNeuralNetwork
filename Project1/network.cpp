@@ -111,7 +111,7 @@ void network::backprop(std::vector<double> &xx,  double &yy) {
 	//a copy of xx is made here instead of a reference since will be changing the values of the vector in this function
 
 	//Activate all neurons
-	double sigma_z = 0, z = 0, w = 0, b = 0, x;
+	double sigma_z = 0, z = 0, w = 0, b = 0, x = 0;
 	activations[0] = xx;
 
 	for (int i = 0; i < weights.size(); i++) {
@@ -121,12 +121,13 @@ void network::backprop(std::vector<double> &xx,  double &yy) {
 			sigma_z = 0; //initializing sigma_z
 			std::vector<double> &ws = weights[i][j];
 			b = biases[i][j];
-
+			
 			for (int k = 0; k<ws.size(); k++){
 			//each weight
 				w = ws[k];
-				x = xx[k];
+				x = activations[i][k];
 				z = w * x + b;
+	
 				sigma_z += z;
 				
 			}

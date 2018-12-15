@@ -8,8 +8,8 @@ public:
 	void updateNetwork(int * batch, int batch_size, double eta);
 	void backprop(std::vector<double>& xx, double & yy);
 	void prediction();
-	std::vector<double> sigmoid(std::vector<double> &z);
-	std::vector<double> dsigmoid(std::vector<double> &z);
+	double sigmoid(double sigma_z);
+	double dsigmoid(double sigma_z);
 	void printLayers();
 	void getBiases();
 private:

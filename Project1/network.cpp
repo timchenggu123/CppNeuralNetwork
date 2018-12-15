@@ -27,13 +27,13 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 	//initializing die_b and die_w as zeor matrices with dimensions same as weights and biases
 	die_b.resize(biases.size());
 	for (int i = 0; i < biases.size(); i++) {
-		die_b[i].resize(biases[i].resize);
+		die_b[i].resize(biases[i].size());
 	}
 
 	die_w.resize(weights.size());
-	for (int i = 0; i < biases.size(); i++) {
-		die_w.resize(weights[i].size);
-		for (int j = 0; j < biases.size(); j++) {
+	for (int i = 0; i < weights.size(); i++) {
+		die_w[i].resize(weights[i].size());
+		for (int j = 0; j < weights[i].size(); j++) {
 			die_w[i][j].resize(weights[i][j].size());
 		}
 	}
@@ -55,6 +55,11 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 				weights[i][j][k] = nd(rng);
 			}
 		}
+	}
+	//initializing activations matrix, which should have the same dimensions as our networ layers
+	activations.resize(nlayers);
+	for (int i = 0; i < nlayers; i++) {
+		activations[i].resize(layers[i]);
 	}
 }
 
@@ -103,8 +108,32 @@ void network::updateNetwork(int *batch, int batch_size, double eta) {
 }
 
 void network::backprop(std::vector<double> &xx,  double &yy) {
-	//xx and yy are elements of the vector x and y respectively
-	
+	//a copy of xx is made here instead of a reference since will be changing the values of the vector in this function
+
+	//Activate all neurons
+	double sigma_z = 0, z = 0, w = 0, b = 0, x;
+	activations[0] = xx;
+
+	for (int i = 0; i < weights.size(); i++) {
+	//each layer
+		for (int j = 0; j < weights[i].size(); j++) {
+		//each neuron
+			sigma_z = 0; //initializing sigma_z
+			std::vector<double> &ws = weights[i][j];
+			b = biases[i][j];
+
+			for (int k = 0; k<ws.size(); k++){
+			//each weight
+				w = ws[k];
+				x = xx[k];
+				z = w * x + b;
+				sigma_z += z;
+				
+			}
+
+			activations[i + 1][j] = sigmoid(sigma_z);
+		}
+	}
 }
 
 
@@ -113,24 +142,21 @@ void network::prediction() {
 }
 
 
-std::vector<double> network::sigmoid(std::vector<double> &z) {
+double network::sigmoid(double sigma_z) {
 	//This function applies sigmoid neuron calcuations given a vector of z values.
-	std::vector<double> output(z.size(), 0); // This vector will hold the function output values
+	double output; // This vector will hold the function output values
 
-	for (int i = 0; i < z.size();i++) {
-		output.at(i) = 1.0 / (1.0 + exp(z[i]));
-	}
+	output = 1.0 / (1.0 + sigma_z);
 
 	return output;
 }
 
-std::vector<double> network::dsigmoid(std::vector<double> &z) {
+double network::dsigmoid(double sigma_z) {
 	//This is the derivative of the sigmoid function 
-	std::vector<double> output(z.size(), 0);
+	double output;
 
-	for (int i = 0; i < z.size(); i++) {
-		output.at(i) = (1.0 / (1.0 + exp(z[i]))) / (1 - (1.0 / (1.0 + exp(z[i]))));
-	}
+	output = (1.0 / (1.0 + sigma_z)) / (1 - (1.0 / (1.0 + sigma_z)));
+
 
 	return output;
 }

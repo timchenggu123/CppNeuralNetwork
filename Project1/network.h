@@ -20,7 +20,7 @@ private:
 	std::vector <std::vector<double> > y; //A vector storing all the corresponding y's for each x
 	std::vector<std::vector<double>> z; //a matrix storign all the z activation values layer by layer. Should have same dimensions as biases.
 	std::vector<std::vector<double>> die_b; //storing the resulting gradient descent vector for b 
-	std::vector<std::vector<std::vector<double>>> die_w; //storing the resulting gradient desdcent vector for w
+	std::vector<std::vector<double>> die_w; //storing the resulting gradient desdcent vector for w
 	std::vector<std::vector<double>> activations; //storing all the neuron actionvations in the backprop() function
 	int nlayers;
 

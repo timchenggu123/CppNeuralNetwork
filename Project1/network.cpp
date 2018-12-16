@@ -28,15 +28,8 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 	for (int i = 0; i < biases.size(); i++) {
 		die_b[i].resize(biases[i].size());
 	}
-
-	die_w.resize(weights.size());
-	for (int i = 0; i < weights.size(); i++) {
-		die_w[i].resize(weights[i].size());
-		for (int j = 0; j < weights[i].size(); j++) {
-			die_w[i][j].resize(weights[i][j].size());
-		}
-	}
-
+	
+	die_w = die_b;
 	//allcating z matrix
 	z.resize(biases.size());
 	for (int i = 0; i < biases.size(); i++) {
@@ -146,23 +139,52 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 	}
 
 	//backward pass
-	std::vector<double> delta(yy.size(), 0);
+	std::vector<std::vector<double>> delta = activations; //here we initialize a place holder delta for all delta values.  Note it has the same dimensions as die_b
+	// can delete
+	for (auto &a : delta) {
+		for (auto &b : a)
+			b = 0;
+	}
+	//can delete
 
-	for (int i = 0; i < delta.size(); i++) {
+	for (int i = 0; i < delta[delta.size()-1].size(); i++) {
 		if (!(z.empty() && activations.empty())) {
 			zz = z[z.size() - 1][i];
-			delta[i] = (yy[i] - activations[activations.size() - 1][i]) * dsigmoid(zz);
+			delta[delta.size()-1][i] = (yy[i] - activations[activations.size() - 1][i]) * dsigmoid(zz);
 		}
 	}
 
 	//intialize die_b and die_w values
-	die_b[die_b.size() - 1] = delta;
+	die_b[die_b.size() - 1] = delta[die_b.size()-1];
 	for (int i = 0; i < die_w[die_w.size() - 1].size(); i++) {
-		for (int j = 0; j < die_w[die_w.size() -1][i].size(); j++) {
-			die_w[die_w.size() - 1][i][j] = delta[i]*activations[activations.size()-2][j];
+		for (int j = 0; j < weights[weights.size() -1][i].size(); j++) {
+			die_w[die_w.size() - 1][i] += delta[delta.size()-1][i]*activations[activations.size()-2][j];
 		}
 	}
 
+	//loop through each layer and perform backward pass
+	double dsig = 0;
+	double delta_k;
+	for (int i = 2; i < nlayers; i++) {
+
+		for (int j = 0; j < nwlayers[nlayers - i]; j++) {
+			zz = z[z.size() - i][j];
+			dsig = dsigmoid(zz);
+			//loop through elements in layer -i + 1 to calculate die b for layer -i
+			for (int k = 0; k < nwlayers[nlayers - i + 1]; k++) {
+				delta_k = delta[delta.size() - i + 1][k] * weights[weights.size()- i + 1][k][j]*dsig;
+				delta[delta.size() - i][j] += delta_k;
+			}
+			die_b[die_b.size() - i][j] = delta[delta.size() - i][j];
+			
+			//loop through elements in layer -i -1 to caculate die w for layer -i
+			for (int k = 0; k < nwlayers[nlayers - i-1]; k++) {
+				delta_k = activations[activations.size() - i - 1][k] * delta[delta.size() - i][j];
+				die_w[die_w.size() - i][j] += delta_k;
+			}
+		}
+		
+	}
 	int stop = 1; //stop here
 	
 }

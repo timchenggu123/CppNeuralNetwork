@@ -8,28 +8,30 @@ network::network(std::vector<int> &layers, std::vector<std::vector<double>> &dat
 	nwlayers = layers;
 	nlayers = layers.size();
 
-	//allocating biases 
+	//allocating biases and sum_die_b
 	biases.resize(layers.size() - 1); // -1 here because the first layer is an input layer
 	for (int i = 1; i < (layers.size()); i++) { // index starts at one because first layer is input layer
 		biases[i - 1].resize(layers[i]); //i - 1 here because we set i to be the layer we want to target, and i starts at 1 instead of 0
 	}
+	sum_die_b = biases;
 
-	// allocating weights
+	// allocating weights and sum_die_w
 	weights.resize(layers.size() - 1);
 	for (int i = 1; i < (layers.size()); i++) { // index starts at one because first layer is input layer 
 		weights[i - 1].resize(layers[i]);
 		for (auto &element : weights[i - 1]) {
 			element.resize(layers[i - 1]);
 		}
-
 	}
+
+	sum_die_w = weights;
 	//allocating die_b and die_w as zeor matrices with dimensions same as weights and biases
 	die_b.resize(biases.size());
 	for (int i = 0; i < biases.size(); i++) {
 		die_b[i].resize(biases[i].size());
 	}
 	
-	die_w = die_b;
+	die_w = weights;
 	//allcating z matrix
 	z.resize(biases.size());
 	for (int i = 0; i < biases.size(); i++) {
@@ -104,8 +106,40 @@ void network::updateNetwork(int *batch, int batch_size, double eta) {
 	for (int i = 0; i < batch_size; i++) {
 		this->backprop(x[batch[i]], y[batch[i]]);
 
+		//updating network biases and weights
+		for (int j = 0; j < sum_die_b.size(); j++) {
+			for (int k = 0; k < sum_die_b[j].size(); k++) {
+				sum_die_b[j][k] += die_b[j][k];
+			}
+		}
+
+		for (int j = 0; j < sum_die_w.size(); j++) {
+			for (int k = 0; k < sum_die_w[j].size(); k++) {
+				for (int l = 0; l < sum_die_w[j][k].size(); l++) {
+					sum_die_w[j][k][l] += die_w[j][k][l];
+				}
+			}
+		}
+
+	}	
+
+	for (int i = 0; i < sum_die_w.size(); i++) {
+		for (int j = 0; j < sum_die_w[i].size(); j++) {
+			for (int k = 0; k < sum_die_w[i][j].size(); k++) {
+				weights[i][j][k] -= eta * sum_die_w[i][j][k] / batch_size;
+				
+				sum_die_w[i][j][k] = 0; //re-initialize sum_die_w for reuse
+			}
+		}
 	}
 
+	for (int i = 0; i < sum_die_b.size(); i++) {
+		for (int j = 0; j < sum_die_w[i].size(); j++) {
+			biases[i][j] -= eta * sum_die_b[i][j] / batch_size;
+
+			sum_die_b[i][j] = 0; //re-initialize sum_die_b for re-use
+		}
+	}
 
 }
 
@@ -156,9 +190,9 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 
 	//intialize die_b and die_w values
 	die_b[die_b.size() - 1] = delta[die_b.size()-1];
-	for (int i = 0; i < die_w[die_w.size() - 1].size(); i++) {
+	for (int i = 0; i < weights[weights.size() - 1].size(); i++) {
 		for (int j = 0; j < weights[weights.size() -1][i].size(); j++) {
-			die_w[die_w.size() - 1][i] += delta[delta.size()-1][i]*activations[activations.size()-2][j];
+			die_w[die_w.size() - 1][i][j] = delta[delta.size()-1][i]*activations[activations.size()-2][j];
 		}
 	}
 
@@ -180,7 +214,7 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 			//loop through elements in layer -i -1 to caculate die w for layer -i
 			for (int k = 0; k < nwlayers[nlayers - i-1]; k++) {
 				delta_k = activations[activations.size() - i - 1][k] * delta[delta.size() - i][j];
-				die_w[die_w.size() - i][j] += delta_k;
+				die_w[die_w.size() - i][j][k] = delta_k;
 			}
 		}
 		

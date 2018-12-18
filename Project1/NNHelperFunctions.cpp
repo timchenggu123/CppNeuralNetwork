@@ -59,7 +59,8 @@ namespace NNHelper {
 			n_rows = reverseInt(n_rows);
 			file.read((char*)&n_cols, sizeof(n_cols));
 			n_cols = reverseInt(n_cols);
-
+			
+			std::cout << "Loading " << number_of_images <<  "MNIST images." << std::endl;
 			x.resize(number_of_images);
 
 			for (int i = 0; i < number_of_images; ++i)
@@ -78,6 +79,7 @@ namespace NNHelper {
 			int a = 0; //stop here
 		}
 		file.close();
+		std::cout << "Completed loading MNIST images" <<std::endl;
 	}
 
 	void read_mnist_labels(string full_path, std::vector<std::vector<double>> &y)
@@ -94,6 +96,7 @@ namespace NNHelper {
 			file.read((char*)&number_of_labels, sizeof(number_of_labels));
 			number_of_labels = reverseInt(number_of_labels);
 
+			std::cout << "Loading " << number_of_labels << " of MNIST labels" << std::endl;
 			y.resize(number_of_labels);
 
 			for (int i = 0; i < number_of_labels; ++i)
@@ -108,6 +111,8 @@ namespace NNHelper {
 			}
 			int a = 0; //stop here (for testing purposes only)
 		}
+		file.close();
+		std::cout << "Completed Loading MNIST Labels" << std::endl;
 
 	}
 

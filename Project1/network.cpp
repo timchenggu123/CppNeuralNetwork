@@ -72,15 +72,20 @@ void network::train ( int epochs, int batch_size, double eta ){
 		throw "Error in network.train(): input vector x and y must be the same length";
 	}
 	int n = x.size();
+
+	//initializing index vector
 	std::vector<int> index(n, 0); //This holds the indices for our input vector x and output vector y
-	
+	for (int i = 0; i < index.size(); i++) {
+		index[i] = i;
+	}
+
 	//randomly shuffles the vector
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 
 	for (int epoch = 0; epoch < epochs; epoch++) {
 		
-		std::cout << "epoch count:" + epoch << std::endl;
+		std::cout << "epoch count:" << epoch << std::endl;
 
 		std::shuffle(index.begin(), index.end(), rng);
 
@@ -88,7 +93,7 @@ void network::train ( int epochs, int batch_size, double eta ){
 		int batch_count = 0;
 		for (int i = 0 - batch_size; i < n; i += batch_size) {
 
-			std::cout << "bactch count: " + batch_count << std::endl;
+			std::cout << "bactch count: " << batch_count << std::endl;
 			batch_count++;
 
 			//this level loops through all the batches within the x vector

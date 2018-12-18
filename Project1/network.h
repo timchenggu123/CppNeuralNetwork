@@ -7,7 +7,7 @@ public:
 	void train(int  epochs, int batch_size, double eta);
 	void updateNetwork(int * batch, int batch_size, double eta);
 	void backprop(std::vector<double>& xx, std::vector<double>& yy);
-	void prediction();
+	void prediction(std::vector<std::vector<double>> xx);
 	double sigmoid(double sigma_z);
 	double dsigmoid(double sigma_z);
 	void printLayers();

@@ -137,7 +137,7 @@ void network::updateNetwork(int *batch, int batch_size, double eta) {
 		for (int j = 0; j < sum_die_w[i].size(); j++) {
 			biases[i][j] -= eta * sum_die_b[i][j] / batch_size;
 
-			sum_die_b[i][j] = 0; //re-initialize sum_die_b for re-use
+			sum_die_b[i][j] = 0; //re-initialize sum_die
 		}
 	}
 
@@ -224,8 +224,30 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 }
 
 
-void network::prediction() {
+void network::prediction(std::vector<std::vector<double>> xx) {
+	double wx, w, x, zz, b;
 
+	for (int i = 0; i < weights.size(); i++) {
+		//each layer
+		for (int j = 0; j < weights[i].size(); j++) {
+			//each neuron
+			wx = 0; //initializing sigma_z
+			std::vector<double> &ws = weights[i][j];
+			b = biases[i][j];
+
+			for (int k = 0; k < ws.size(); k++) {
+				//each weight
+				w = ws[k];
+				x = activations[i][k];
+				wx += w * x;
+
+			}
+
+			zz = wx + b;
+			z[i][j] = zz; //store zz in z matix.
+			activations[i + 1][j] = sigmoid(zz);
+		}
+	}
 }
 
 

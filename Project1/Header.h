@@ -9,7 +9,7 @@
 #include <ctime>
 #include <algorithm>
 #include <fstream>
-
+#include <windows.h>
 
 #endif
 

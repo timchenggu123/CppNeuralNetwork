@@ -77,28 +77,32 @@ void network::train ( int epochs, int batch_size, double eta ){
 	//randomly shuffles the vector
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::shuffle(index.begin(), index.end(), rng);
-	
-	int *batch = new int[batch_size]; //initialize a batch vector of use-specified length containing elements from the index vector
-	for (int i = 0 - batch_size; i < n; i += batch_size) {
-		//this level loops through all the batches within the x vector
 
-		for (int j = i + batch_size, k = 0; j < i + batch_size * 2; j++, k++) {
-			// This loop populates the batch array with each element from the index
-			// j loops through each corresponding elements in index
-			// k loops through each batch element instead
-			if (j == index.size()) {
-				break;
+	for (int epoch = 0; epoch < epochs; epoch++) {
+		
+		std::shuffle(index.begin(), index.end(), rng);
+
+		int *batch = new int[batch_size]; //initialize a batch vector of use-specified length containing elements from the index vector
+		for (int i = 0 - batch_size; i < n; i += batch_size) {
+			//this level loops through all the batches within the x vector
+
+			for (int j = i + batch_size, k = 0; j < i + batch_size * 2; j++, k++) {
+				// This loop populates the batch array with each element from the index
+				// j loops through each corresponding elements in index
+				// k loops through each batch element instead
+				if (j == index.size()) {
+					break;
+				}
+				batch[k] = index[j];
+				/*for testing purposes*/ std::cout << batch[1] << std::endl;
 			}
-			batch[k] = index[j];
-			/*for testing purposes*/ std::cout << batch[1] << std::endl;
-		}
-		this->updateNetwork(batch, batch_size,eta);
-		
-		
-	}
-	delete[] batch;
+			this->updateNetwork(batch, batch_size, eta);
 
+
+		}
+		delete[] batch;
+
+	}
 }
 
 void network::updateNetwork(int *batch, int batch_size, double eta) {

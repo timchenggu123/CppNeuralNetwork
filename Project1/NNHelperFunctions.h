@@ -7,7 +7,7 @@ namespace NNHelper{
 	extern std::array<int, 2> shape(std::vector<double> &vec);
 	extern int reverseInt(int i);
 	extern void read_mnist_images(std::string full_path, std::vector<std::vector<double>> &x);
-	extern void read_mnist_labels(std::string full_path, std::vector<double> &y);
+	extern void read_mnist_labels(std::string full_path, std::vector<std::vector<double>> &y);
 }
 
 

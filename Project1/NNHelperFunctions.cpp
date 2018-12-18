@@ -80,7 +80,7 @@ namespace NNHelper {
 		file.close();
 	}
 
-	void read_mnist_labels(string full_path, std::vector<double> &y)
+	void read_mnist_labels(string full_path, std::vector<std::vector<double>> &y)
 	{
 		ifstream file(full_path + "train-labels.idx1-ubyte");
 		if (file.is_open())
@@ -98,11 +98,15 @@ namespace NNHelper {
 
 			for (int i = 0; i < number_of_labels; ++i)
 			{
+				y[i].resize(10);
 				unsigned char temp = 0;
 				file.read((char*)&temp, sizeof(temp));
-				y[i] += temp;
+				y[i][temp] = 1; /*each y is a vector of size 10, and each element is either 0 or 1.
+								here we are trying to set the temp_th element to 1 to represent a 
+								correspoing digit between 0 to 9
+								*/
 			}
-			int a = 0; //stop here
+			int a = 0; //stop here (for testing purposes only)
 		}
 
 	}

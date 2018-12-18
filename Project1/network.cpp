@@ -80,14 +80,20 @@ void network::train ( int epochs, int batch_size, double eta ){
 
 	for (int epoch = 0; epoch < epochs; epoch++) {
 		
+		std::cout << "epoch count:" + epoch << std::endl;
+
 		std::shuffle(index.begin(), index.end(), rng);
 
 		int *batch = new int[batch_size]; //initialize a batch vector of use-specified length containing elements from the index vector
+		int batch_count = 0;
 		for (int i = 0 - batch_size; i < n; i += batch_size) {
-			//this level loops through all the batches within the x vector
 
+			std::cout << "bactch count: " + batch_count << std::endl;
+			batch_count++;
+
+			//this level loops through all the batches within the x vector
 			for (int j = i + batch_size, k = 0; j < i + batch_size * 2; j++, k++) {
-				// This loop populates the batch array with each element from the index
+				// This loop populates the batch vector with elemenst from the index
 				// j loops through each corresponding elements in index
 				// k loops through each batch element instead
 				if (j == index.size()) {

@@ -105,7 +105,7 @@ void network::train ( int epochs, int batch_size, double eta ){
 					break;
 				}
 				batch[k] = index[j];
-				/*for testing purposes*/ std::cout << batch[1] << std::endl;
+				/*for testing purposes*/ std::cout << batch[k] << std::endl;
 			}
 			this->updateNetwork(batch, batch_size, eta);
 
@@ -197,10 +197,8 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 	//can delete
 
 	for (int i = 0; i < delta[delta.size()-1].size(); i++) {
-		if (!(z.empty() && activations.empty())) {
 			zz = z[z.size() - 1][i];
-			delta[delta.size()-1][i] = (yy[i] - activations[activations.size() - 1][i]) * dsigmoid(zz);
-		}
+			delta[delta.size()-1][i] = (activations[activations.size() - 1][i] - yy[i]) * dsigmoid(zz);
 	}
 
 	//intialize die_b and die_w values
@@ -213,13 +211,14 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 
 	//loop through each layer and perform backward pass
 	double dsig = 0;
-	double delta_k;
+	double delta_k; //holds each inividual delta
 	for (int i = 2; i < nlayers; i++) {
 
 		for (int j = 0; j < nwlayers[nlayers - i]; j++) {
 			zz = z[z.size() - i][j];
 			dsig = dsigmoid(zz);
 			//loop through elements in layer -i + 1 to calculate die b for layer -i
+			//The following for-loop emulates a dot multiplication between delta and weights
 			for (int k = 0; k < nwlayers[nlayers - i + 1]; k++) {
 				delta_k = delta[delta.size() - i + 1][k] * weights[weights.size()- i + 1][k][j]*dsig;
 				delta[delta.size() - i][j] += delta_k;
@@ -239,8 +238,9 @@ void network::backprop(std::vector<double> &xx, std::vector<double> &yy) {
 }
 
 
-void network::prediction(std::vector<std::vector<double>> xx) {
+void network::prediction(std::vector<double> &xx, std::vector<double> &yy) {
 	double wx, w, x, zz, b;
+	activations[0] = xx;
 
 	for (int i = 0; i < weights.size(); i++) {
 		//each layer
@@ -263,6 +263,7 @@ void network::prediction(std::vector<std::vector<double>> xx) {
 			activations[i + 1][j] = sigmoid(zz);
 		}
 	}
+	yy = activations[activations.size() - 1];
 }
 
 
@@ -270,7 +271,7 @@ double network::sigmoid(double z) {
 	//This function applies sigmoid neuron calcuations given a vector of z values.
 	double output; // This vector will hold the function output values
 
-	output = 1.0 / (1.0 + z);
+	output = 1.0 / (1.0 + exp(-1*z));
 
 	return output;
 }
@@ -279,7 +280,7 @@ double network::dsigmoid(double z) {
 	//This is the derivative of the sigmoid function 
 	double output;
 
-	output = (1.0 / (1.0 + z)) / (1 - (1.0 / (1.0 + z)));
+	output = sigmoid(z) * (1-sigmoid(z));
 
 
 	return output;

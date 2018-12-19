@@ -92,7 +92,6 @@ void network::train ( int epochs, int batch_size, double eta ){
 		int *batch = new int[batch_size]; //initialize a batch vector of use-specified length containing elements from the index vector
 		int batch_count = 0;
 		for (int i = 0 - batch_size; i < n; i += batch_size) {
-			break;
 			std::cout << "bactch count: " << batch_count << std::endl;
 			batch_count++;
 

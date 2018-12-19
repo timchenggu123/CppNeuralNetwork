@@ -44,7 +44,7 @@ namespace NNHelper {
 	}
 	void read_mnist_images(string full_path, std::vector<std::vector<double>> &x)
 	{
-		ifstream file(full_path + "train-images.idx3-ubyte");
+		ifstream file(full_path + "train-images.idx3-ubyte", ios::binary);
 		if (file.is_open())
 		{
 			int magic_number = 0;
@@ -60,23 +60,24 @@ namespace NNHelper {
 			file.read((char*)&n_cols, sizeof(n_cols));
 			n_cols = reverseInt(n_cols);
 			
-			std::cout << "Loading " << number_of_images <<  "MNIST images." << std::endl;
+			std::cout << "Loading " << number_of_images <<  " MNIST images." << std::endl;
 			x.resize(number_of_images);
 
 			for (int i = 0; i < number_of_images; ++i)
 			{
-				x[i].resize(n_rows * n_cols);
+				x[i].resize(n_rows * n_cols,-1);
 				for (int r = 0; r < n_rows; ++r)
 				{
 					for (int c = 0; c < n_cols; ++c)
 					{
 						unsigned char temp = 0;
 						file.read((char*)&temp, sizeof(temp));
-						x[i][r*n_cols + c] += temp;
+						int j = r * n_cols + c;
+						x[i][j] = temp;
 					}
 				}
 			}
-			int a = 0; //stop here
+			
 		}
 		file.close();
 		std::cout << "Completed loading MNIST images" <<std::endl;
@@ -84,7 +85,7 @@ namespace NNHelper {
 
 	void read_mnist_labels(string full_path, std::vector<std::vector<double>> &y)
 	{
-		ifstream file(full_path + "train-labels.idx1-ubyte");
+		ifstream file(full_path + "train-labels.idx1-ubyte",ios::binary);
 		if (file.is_open())
 		{
 			int magic_number = 0;
